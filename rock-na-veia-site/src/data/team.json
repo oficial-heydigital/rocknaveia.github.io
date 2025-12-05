@@ -1,0 +1,28 @@
+{
+  "members": [
+    {
+      "name": "João Silva",
+      "role": "Vocalista",
+      "image": "images/members/joao_silva.jpg",
+      "bio": "João é o vocalista da banda e traz uma energia contagiante aos palcos. Com uma carreira de mais de 10 anos, ele é conhecido por sua presença de palco e carisma."
+    },
+    {
+      "name": "Maria Oliveira",
+      "role": "Guitarrista",
+      "image": "images/members/maria_oliveira.jpg",
+      "bio": "Maria é a guitarrista principal e é responsável pelos riffs marcantes que definem o som da banda. Ela começou a tocar guitarra aos 12 anos e nunca parou."
+    },
+    {
+      "name": "Carlos Pereira",
+      "role": "Baixista",
+      "image": "images/members/carlos_pereira.jpg",
+      "bio": "Carlos é o baixista e traz a base rítmica que mantém a banda unida. Ele é um músico versátil e já tocou em diversos estilos antes de se juntar ao Rock na Véia."
+    },
+    {
+      "name": "Ana Costa",
+      "role": "Baterista",
+      "image": "images/members/ana_costa.jpg",
+      "bio": "Ana é a baterista e sua batida poderosa é a alma da banda. Com uma paixão pela música desde criança, ela é uma força criativa dentro do grupo."
+    }
+  ]
+}

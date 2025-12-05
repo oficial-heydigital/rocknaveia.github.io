@@ -1,0 +1,32 @@
+{
+  "events": [
+    {
+      "date": "2023-11-01",
+      "location": "Teatro Municipal",
+      "city": "São Paulo",
+      "time": "20:00",
+      "ticketLink": "https://example.com/tickets/teatro-municipal"
+    },
+    {
+      "date": "2023-11-15",
+      "location": "Casa de Shows",
+      "city": "Rio de Janeiro",
+      "time": "21:00",
+      "ticketLink": "https://example.com/tickets/casa-de-shows"
+    },
+    {
+      "date": "2023-12-05",
+      "location": "Festival de Música",
+      "city": "Belo Horizonte",
+      "time": "19:00",
+      "ticketLink": "https://example.com/tickets/festival-de-musica"
+    },
+    {
+      "date": "2023-12-20",
+      "location": "Espaço Cultural",
+      "city": "Curitiba",
+      "time": "18:00",
+      "ticketLink": "https://example.com/tickets/espaco-cultural"
+    }
+  ]
+}
