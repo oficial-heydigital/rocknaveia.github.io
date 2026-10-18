@@ -10,8 +10,10 @@ from PIL import Image, ImageOps
 OUT = Path("_site")
 shutil.rmtree(OUT, ignore_errors=True)
 OUT.mkdir()
-for item in ("index.html", "config.js", "assets", "admin"):
+for item in ("index.html", "config.js", "assets", "admin", "midia"):
     p = Path(item)
+    if not p.exists():
+        continue
     shutil.copytree(p, OUT / item) if p.is_dir() else shutil.copy(p, OUT / item)
 (OUT / "data").mkdir()
 
@@ -59,6 +61,8 @@ if vf.exists():
                        "date": partes[2] if len(partes) > 2 else ""})
 videos.sort(key=lambda v: v["date"], reverse=True)
 
+IMG = re.compile(r"^!\[[^\]]*\]\((.+)\)$")
+VID = re.compile(r"^\[video\]\s*(\S+)$", re.I)
 posts = []
 for f in Path("posts").glob("*.md"):
     if f.name.startswith("_"):
@@ -67,10 +71,27 @@ for f in Path("posts").glob("*.md"):
     linhas = f.read_text(encoding="utf-8").strip().splitlines()
     if not linhas:
         continue
-    tit = linhas[0].lstrip("# ").strip()
-    posts.append({"date": data, "title": tit, "body": "\n".join(linhas[1:]).strip()})
+    texto, imgs, vids = [], [], []
+    for l in linhas[1:]:
+        s = l.strip()
+        if IMG.match(s):
+            imgs.append(IMG.match(s).group(1))
+        elif VID.match(s):
+            u = VID.match(s).group(1)
+            vids.append({"url": u, "youtube": yt(u)})
+        else:
+            texto.append(l)
+    posts.append({"date": data, "title": linhas[0].lstrip("# ").strip(),
+                  "body": "\n".join(texto).strip(), "images": imgs, "videos": vids})
 posts.sort(key=lambda p: p["date"], reverse=True)
 
+events = []
+if Path("agenda.json").exists():
+    try:
+        events = json.loads(Path("agenda.json").read_text(encoding="utf-8"))
+    except Exception as e:
+        print("agenda.json inválido:", e)
+
 (OUT / "data" / "site.json").write_text(
-    json.dumps({"albums": albums, "videos": videos, "posts": posts}, ensure_ascii=False), encoding="utf-8")
-print(f"{len(albums)} álbuns, {len(videos)} vídeos, {len(posts)} posts")
+    json.dumps({"albums": albums, "videos": videos, "posts": posts, "events": events}, ensure_ascii=False), encoding="utf-8")
+print(f"{len(albums)} álbuns, {len(videos)} vídeos, {len(posts)} posts, {len(events)} eventos")
