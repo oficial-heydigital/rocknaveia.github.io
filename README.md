@@ -55,6 +55,9 @@ Se preencher o `config.js` com o Google Agenda (seção abaixo), o Google passa 
 ## Posts com fotos e vídeos
 Na aba **📰 Posts** você pode anexar várias fotos, colar links do YouTube (um por linha) e enviar um vídeo curto do celular de até 25 MB. Vídeos maiores devem ir para o YouTube. Ao editar um post, dá para remover fotos e vídeos dele.
 
+## Posts do Instagram
+Na página `/admin/`, aba **📸 Instagram**: no Instagram, abra o post, toque nos três pontinhos → **Copiar link** e cole no admin. O post aparece na seção **No Instagram** do site (os 6 mais recentes) em 1 a 2 minutos, com foto, vídeo e legenda originais. Funciona com o perfil público @rocknaveiaoficial. Enquanto não houver nenhum post cadastrado, a seção fica escondida. Atenção: essa seção carrega scripts do Instagram, o que pode exigir um aviso de cookies (LGPD).
+
 ## Se as fotos, posts e vídeos não aparecem
 O site só mostra esse conteúdo depois que a automação roda. Confira:
 1. **Settings → Pages → Source** precisa estar em **GitHub Actions** (não "Deploy from a branch").
@@ -76,7 +79,7 @@ Depois, basta criar o evento no Google Agenda, com título, data/hora e **local*
 Estão no arquivo `index.html`. Busque o texto (Ctrl+F no editor do GitHub) e altere. WhatsApp (11 98713-5885), e-mail (oficialrocknaveia@gmail.com) e Instagram (@rocknaveiaoficial) ficam na seção "Contrate a banda", no rodapé e no botão flutuante do WhatsApp. O texto da mensagem automática está dentro do link `wa.me`, depois de `?text=`.
 
 ## Estrutura
-`index.html` (página) · `agenda.json` (shows) · `midia/` (fotos e vídeos dos posts) · `config.js` (agenda) · `assets/` (logos e script) · `fotos/` · `posts/` · `videos.txt` · `build.py` e `.github/workflows/publicar.yml` (automação; não precisa mexer).
+`index.html` (página) · `agenda.json` (shows) · `instagram.json` (posts do Instagram) · `midia/` (fotos e vídeos dos posts) · `config.js` (agenda) · `assets/` (logos e script) · `fotos/` · `posts/` · `videos.txt` · `build.py` e `.github/workflows/publicar.yml` (automação; não precisa mexer).
 
 ## Testar no computador (opcional)
 `pip install pillow && python build.py && python -m http.server -d _site`

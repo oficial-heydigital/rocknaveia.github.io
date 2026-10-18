@@ -92,6 +92,13 @@ if Path("agenda.json").exists():
     except Exception as e:
         print("agenda.json inválido:", e)
 
+instagram = []
+if Path("instagram.json").exists():
+    try:
+        instagram = json.loads(Path("instagram.json").read_text(encoding="utf-8"))
+    except Exception as e:
+        print("instagram.json inválido:", e)
+
 (OUT / "data" / "site.json").write_text(
-    json.dumps({"albums": albums, "videos": videos, "posts": posts, "events": events}, ensure_ascii=False), encoding="utf-8")
+    json.dumps({"albums": albums, "videos": videos, "posts": posts, "events": events, "instagram": instagram}, ensure_ascii=False), encoding="utf-8")
 print(f"{len(albums)} álbuns, {len(videos)} vídeos, {len(posts)} posts, {len(events)} eventos")

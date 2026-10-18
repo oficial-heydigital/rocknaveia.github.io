@@ -41,6 +41,9 @@ fetch('data/site.json').then(function(r){return r.json()}).then(function(D){
   return'<div class="card">'+th+'<h3 style="margin-top:10px">'+esc(v.title)+'</h3>'+(v.date?'<p class="dt">'+fd(v.date)+'</p>':'')+'<a class="l" href="'+esc(v.url)+'" target="_blank" rel="noopener" data-i="'+i+'">▶ Assistir</a></div>'}).join(''):'<p>Em breve, vídeos!</p>';
  $('vids').onclick=function(e){var a=e.target.closest('a[data-i]');if(!a)return;var v=V[a.dataset.i];if(!v.youtube)return;e.preventDefault();
   $('lc').innerHTML='<iframe allowfullscreen allow="autoplay; encrypted-media" src="https://www.youtube.com/embed/'+v.youtube+'?autoplay=1"></iframe>';$('lb').classList.add('on');$('lp').style.display=$('ln').style.display='none'};
+ var G=D.instagram||[];
+ if(G.length){$('instagram').hidden=false;$('igm').hidden=false;$('igs').innerHTML=G.slice(0,6).map(function(u){return'<blockquote class="instagram-media" data-instgrm-permalink="'+esc(u)+'" data-instgrm-version="14" style="width:100%;max-width:540px;min-width:300px;background:#fff;border:0;border-radius:12px;margin:0"><a href="'+esc(u)+'" target="_blank" rel="noopener" style="color:#0D0D0D;padding:16px;display:block">Ver publicação no Instagram</a></blockquote>'}).join('');
+  var sc=document.createElement('script');sc.async=true;sc.src='https://www.instagram.com/embed.js';document.body.appendChild(sc)}
  var P=D.posts||[];
  $('posts').innerHTML=P.length?P.map(function(p,i){
   var im=(p.images||[]).map(function(s,k){return'<img class="th" loading="lazy" alt="Foto do post '+esc(p.title)+'" data-p="'+i+'" data-k="'+k+'" src="'+esc(s)+'">'}).join('');

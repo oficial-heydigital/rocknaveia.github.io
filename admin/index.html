@@ -24,7 +24,7 @@ progress{width:100%;height:14px;margin-top:12px}
 <button id="go">Entrar</button></section>
 
 <section id="app" hidden>
-<div class="tabs"><button data-t="f" class="on">📷 Fotos</button><button data-t="a">📅 Agenda</button><button data-t="v">🎬 Vídeos</button><button data-t="p">📰 Posts</button><button class="s" id="out">Sair</button></div>
+<div class="tabs"><button data-t="f" class="on">📷 Fotos</button><button data-t="a">📅 Agenda</button><button data-t="v">🎬 Vídeos</button><button data-t="p">📰 Posts</button><button data-t="g">📸 Instagram</button><button class="s" id="out">Sair</button></div>
 <p class="mu">Depois de salvar, o site atualiza sozinho em cerca de 1 a 2 minutos.</p>
 
 <div id="tf" class="card"><h2>Fotos</h2>
@@ -54,6 +54,10 @@ progress{width:100%;height:14px;margin-top:12px}
 <label for="pf">Ou um vídeo curto do celular (opcional, até 25 MB)</label><input id="pf" type="file" accept="video/mp4,video/*">
 <div id="pm"></div><progress id="pgp" hidden></progress>
 <button id="ps">Publicar post</button> <button class="s" id="pc" hidden>Cancelar edição</button><div id="pl" style="margin-top:16px"></div></div>
+<div id="tg" class="card" hidden><h2>Posts do Instagram</h2>
+<p class="mu">No Instagram, abra o post, toque nos três pontinhos e escolha <b>Copiar link</b>. Cole aqui (um por linha). Funciona com fotos, carrosséis e reels do perfil público.</p>
+<label for="gu">Link(s) do post</label><textarea id="gu" style="min-height:90px" placeholder="https://www.instagram.com/p/XXXXXXXXXXX/"></textarea>
+<button id="ga">Adicionar ao site</button><div id="gl" style="margin-top:16px"></div></div>
 </section><div id="t" role="status"></div></div>
 <script>
 const $=i=>document.getElementById(i);let S=JSON.parse(localStorage.getItem('rnv')||'null'),edit=null;
@@ -72,8 +76,8 @@ $('go').onclick=()=>run(async()=>{S={repo:$('rp').value.trim().replace(/^https?:
  const r=await fetch('https://api.github.com/repos/'+S.repo,{headers:{Authorization:'Bearer '+S.token}});if(!r.ok){S=null;throw new Error('Não consegui entrar. Confira o repositório e o código.')}
  localStorage.setItem('rnv',JSON.stringify(S));start()});
 $('out').onclick=()=>{localStorage.removeItem('rnv');location.reload()};
-document.querySelectorAll('.tabs [data-t]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs [data-t]').forEach(x=>x.classList.toggle('on',x==b));['f','a','v','p'].forEach(k=>$('t'+k).hidden=k!=b.dataset.t)});
-function start(){$('login').hidden=true;$('app').hidden=false;$('nd').value=$('vd').value=$('pd').value=today();run(async()=>{await albums();await agenda();await vids();await posts()})}
+document.querySelectorAll('.tabs [data-t]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs [data-t]').forEach(x=>x.classList.toggle('on',x==b));['f','a','v','p','g'].forEach(k=>$('t'+k).hidden=k!=b.dataset.t)});
+function start(){$('login').hidden=true;$('app').hidden=false;$('nd').value=$('vd').value=$('pd').value=today();run(async()=>{await albums();await agenda();await vids();await posts();await ig()})}
 if(S)start();else $('login').hidden=false;
 
 /* FOTOS */
@@ -141,4 +145,14 @@ $('pl').onclick=e=>{const b=e.target.closest('button');if(!b)return;run(async()=
  if(b.dataset.e){const f=await get(b.dataset.e),o=parse(dec(f.content));reset();edit={path:f.path,sha:f.sha};$('pt').value=o.t;$('pb').value=o.b;pim=o.i;pvd=o.v;$('pd').disabled=true;$('ps').textContent='Salvar alterações';$('pc').hidden=false;rend();scrollTo(0,0)}
  else if(b.dataset.p&&confirm('Excluir este post e as fotos/vídeos dele?')){const f=await get(b.dataset.p),o=parse(dec(f.content));for(const p of o.i.concat(o.v).filter(loc)){const g=await get(p);if(g)await del(p,g.sha,'Remover mídia')}
   await del(b.dataset.p,b.dataset.s,'Excluir post');msg('Post excluído!');posts()}})};
+
+/* INSTAGRAM */
+let IG=null,igl=[];
+async function ig(){IG=await get('instagram.json');igl=IG?JSON.parse(dec(IG.content)):[];drawIg()}
+function drawIg(){$('gl').innerHTML=igl.map((u,i)=>`<div class="row"><span><a href="${u}" target="_blank" rel="noopener" style="color:var(--y)">${u.replace('https://www.instagram.com/','')}</a></span><button class="d" data-i="${i}">Excluir</button></div>`).join('')||'<p class="mu">Nenhum post do Instagram ainda. Só os 6 mais recentes aparecem no site.</p>'}
+async function saveIg(m){await put('instagram.json',enc(JSON.stringify(igl,null,1)),m,IG&&IG.sha);msg('Salvo com sucesso!');await ig()}
+$('ga').onclick=()=>run(async()=>{const L=$('gu').value.split('\n').map(x=>x.trim()).filter(Boolean);if(!L.length)throw new Error('Cole o link do post.');const ok=[];
+ for(const l of L){const m=l.match(/instagram\.com\/(?:[\w.]+\/)?(p|reels?|tv)\/([\w-]+)/i);if(!m)throw new Error('Link inválido: '+l);ok.push('https://www.instagram.com/'+(m[1].toLowerCase().startsWith('reel')?'reel':m[1].toLowerCase())+'/'+m[2]+'/')}
+ igl=ok.filter(u=>!igl.includes(u)).concat(igl);await saveIg('Adicionar post do Instagram');$('gu').value=''});
+$('gl').onclick=e=>{const b=e.target.closest('button[data-i]');if(!b||!confirm('Remover este post do site?'))return;run(async()=>{igl.splice(+b.dataset.i,1);await saveIg('Remover post do Instagram')})};
 </script></body></html>

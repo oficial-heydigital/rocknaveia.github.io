@@ -46,13 +46,12 @@ a:focus-visible,.btn:focus-visible{outline:3px solid var(--p);outline-offset:3px
 .vt{position:relative;display:block}
 .pm{white-space:pre-line}.dt{color:var(--p)!important;font-weight:600;font-size:.85rem}
 #lb{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:20;display:none;align-items:center;justify-content:center;padding:20px}#lb.on{display:flex}
-#lc{width:100%;display:flex;justify-content:center}
-#lb img{max-width:100%;max-height:88vh;border-radius:8px}#lb iframe{width:min(900px,100%);aspect-ratio:16/9;border:0;border-radius:8px}
+#lc{width:100%;display:flex;justify-content:center}#lb img{max-width:100%;max-height:88vh;border-radius:8px}#lb iframe{width:min(900px,100%);aspect-ratio:16/9;border:0;border-radius:8px}
 #lb button{position:absolute;background:#222;color:#fff;border:0;border-radius:50%;width:48px;height:48px;font-size:1.4rem;cursor:pointer}
 #lx{top:16px;right:16px}#lp{left:12px;top:50%}#ln{right:12px;top:50%}
 </style></head><body>
 <header><div class="nav"><a href="#inicio"><img src="assets/nome.png" alt="Rock na Véia"></a>
-<nav><a href="#inicio">Início</a><a href="#agenda">Agenda</a><a href="#galeria">Galeria</a><a href="#videos">Vídeos</a><a href="#novidades">Novidades</a><a href="#banda">A Banda</a><a href="#contato">Contato</a></nav></div></header>
+<nav><a href="#inicio">Início</a><a href="#agenda">Agenda</a><a href="#galeria">Galeria</a><a href="#videos">Vídeos</a><a href="#novidades">Novidades</a><a href="#instagram" id="igm" hidden>Instagram</a><a href="#banda">A Banda</a><a href="#contato">Contato</a></nav></div></header>
 <main>
 <section id="inicio" class="hero"><div class="w fade">
 <img src="assets/logo.png" alt="Selo da banda Rock na Véia: senhora de cabelos prateados tocando guitarra">
@@ -70,9 +69,13 @@ a:focus-visible,.btn:focus-visible{outline:3px solid var(--p);outline-offset:3px
 
 <section id="novidades" class="alt"><div class="w"><h2>Novidades</h2><div class="grid ev" id="posts"></div></div></section>
 
-<section id="banda"><div class="w"><h2>A Banda</h2>
+<section id="instagram" hidden><div class="w"><h2>No Instagram</h2>
+<div id="igs" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,328px),1fr));gap:16px;margin-top:32px;justify-items:center"></div>
+<p style="margin-top:24px"><a class="btn b2" href="https://www.instagram.com/rocknaveiaoficial/" target="_blank" rel="noopener">Seguir @rocknaveiaoficial</a></p></div></section>
+
+<section id="banda" class="alt"><div class="w"><h2>A Banda</h2>
 <p style="max-width:680px">Formada em <b>2010</b>, a Rock na Véia mistura rock clássico com influências contemporâneas, letras envolventes e muito bom humor. Prova de que guitarra alta não tem prazo de validade.</p>
-<div class="grid mem"><div class="card"><h3>Marcos</h3><p>Vocal</p></div><div class="card"><h3>Sérgio</h3><p>Vocal</p></div><div class="card"><h3>Rogério</h3><p>Guitarra</p></div><div class="card"><h3>Dinho</h3><p>Baixo</p></div><div class="card"><h3>Renk</h3><p>Bateria</p></div></div></div></section>
+<div class="grid mem"><div class="card"><h3>Marcos</h3><p>Vocal</p></div><div class="card"><h3>Rogério</h3><p>Guitarra</p></div><div class="card"><h3>Dinho</h3><p>Baixo</p></div><div class="card"><h3>Renk</h3><p>Bateria</p></div></div></div></section>
 
 <section id="contato" class="cta"><div class="w"><h2>Contrate a banda</h2>
 <p>Casamentos, festas, bares e eventos. Chama a gente e conta a data e a cidade.</p>
