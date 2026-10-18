@@ -1,0 +1,4 @@
+# Um vídeo por linha:  link | título | data (AAAA-MM-DD, opcional)
+# Cole links do YouTube: eles abrem dentro do site, com miniatura.
+# Remova o # do início da linha abaixo e troque pelo seu vídeo:
+# https://www.youtube.com/watch?v=XXXXXXXXXXX | Show no Bar do Zé | 2026-11-07

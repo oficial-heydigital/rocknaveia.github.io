@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Administração – Rock na Véia</title><link rel="icon" href="../assets/favicon.png">
+<style>
+:root{--y:#E8B923;--p:#E82A8E;--b:#1B7FB5;--bg:#0D0D0D;--c:#14141A;--l:#2a2a33;--mu:#B4B4BF;box-sizing:border-box}
+*,*::before,*::after{box-sizing:inherit}body{margin:0;background:var(--bg);color:#F3F3F5;font:17px/1.55 system-ui,Inter,sans-serif;padding:16px}
+.w{max-width:760px;margin:0 auto}h1{font-size:1.6rem;margin:8px 0;color:var(--y)}h2{font-size:1.2rem;margin:0 0 10px}
+.card{background:var(--c);border:1px solid var(--l);border-radius:12px;padding:18px;margin:14px 0}
+label{display:block;font-weight:600;margin:12px 0 4px}input,select,textarea{width:100%;padding:13px;border-radius:10px;border:1px solid #444;background:#0D0D0D;color:#fff;font:inherit}textarea{min-height:140px}
+button{padding:14px 20px;border:0;border-radius:10px;font:inherit;font-weight:700;cursor:pointer;background:var(--y);color:#0D0D0D;margin-top:14px}
+button.s{background:transparent;border:2px solid var(--b);color:#fff}button.d{background:#7a1d3f;color:#fff;margin:0;padding:8px 12px}button:disabled{opacity:.5}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button{margin:0;flex:1}.tabs button.on{background:var(--p);color:#fff}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:12px}.g div{position:relative}.g img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px}.g button{position:absolute;top:4px;right:4px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--l)}.row span{overflow-wrap:anywhere}
+.mu{color:var(--mu);font-size:.9rem}#t{position:fixed;left:16px;right:16px;bottom:16px;max-width:720px;margin:0 auto;padding:14px;border-radius:10px;font-weight:600;display:none;z-index:9}
+#t.ok{background:#1b6b3a;display:block}#t.er{background:#8a1c2b;display:block}[hidden]{display:none!important}
+progress{width:100%;height:14px;margin-top:12px}
+</style></head><body><div class="w">
+<h1>🎸 Administração · Rock na Véia</h1>
+<section id="login" class="card" hidden>
+<h2>Entrar</h2><p class="mu">Informe o repositório do site e o código de acesso (token). Eles ficam salvos só neste aparelho. Veja o passo a passo no README.</p>
+<label for="rp">Repositório (usuario/nome)</label><input id="rp" placeholder="ex.: rocknaveia/rocknaveia" autocapitalize="off">
+<label for="tk">Código de acesso (token)</label><input id="tk" type="password" autocomplete="off">
+<button id="go">Entrar</button></section>
+
+<section id="app" hidden>
+<div class="tabs"><button data-t="f" class="on">📷 Fotos</button><button data-t="v">🎬 Vídeos</button><button data-t="p">📰 Posts</button><button class="s" id="out">Sair</button></div>
+<p class="mu">Depois de salvar, o site atualiza sozinho em cerca de 1 a 2 minutos.</p>
+
+<div id="tf" class="card"><h2>Fotos</h2>
+<label for="al">Álbum</label><select id="al"></select>
+<div id="nw"><label for="nn">Nome do novo álbum</label><input id="nn" placeholder="ex.: Show no Bar do Zé"><label for="nd">Data</label><input id="nd" type="date"></div>
+<label for="fi">Escolher fotos (pode marcar várias)</label><input id="fi" type="file" accept="image/*" multiple>
+<button id="up">Enviar fotos</button><progress id="pg" hidden></progress>
+<div id="ph"></div><button class="d" id="da" hidden style="margin-top:16px;padding:12px">Excluir álbum inteiro</button></div>
+
+<div id="tv" class="card" hidden><h2>Vídeos (YouTube)</h2>
+<label for="vu">Link do vídeo</label><input id="vu" placeholder="https://www.youtube.com/watch?v=..." inputmode="url">
+<label for="vt">Título</label><input id="vt"><label for="vd">Data</label><input id="vd" type="date">
+<button id="va">Adicionar vídeo</button><div id="vl" style="margin-top:16px"></div></div>
+
+<div id="tp" class="card" hidden><h2>Posts (Novidades)</h2>
+<label for="pt">Título</label><input id="pt"><label for="pd">Data</label><input id="pd" type="date">
+<label for="pb">Texto</label><textarea id="pb"></textarea>
+<button id="ps">Publicar post</button> <button class="s" id="pc" hidden>Cancelar edição</button><div id="pl" style="margin-top:16px"></div></div>
+</section><div id="t" role="status"></div></div>
+<script>
+const $=i=>document.getElementById(i);let S=JSON.parse(localStorage.getItem('rnv')||'null'),edit=null;
+const today=()=>new Date().toISOString().slice(0,10);
+const slug=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'sem-nome';
+const enc=t=>btoa(unescape(encodeURIComponent(t))),dec=x=>decodeURIComponent(escape(atob(x.replace(/\n/g,''))));
+function msg(t,ok=true){const e=$('t');e.textContent=t;e.className=ok?'ok':'er';clearTimeout(msg.i);msg.i=setTimeout(()=>e.className='',4500)}
+async function gh(p,o={},q=''){const r=await fetch('https://api.github.com/repos/'+S.repo+'/contents/'+p+q,{...o,headers:{Authorization:'Bearer '+S.token,Accept:'application/vnd.github+json'}});
+ if(r.status==404)return null;const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(r.status==401?'Código de acesso inválido ou vencido.':(j.message||'Erro '+r.status));return j}
+const get=p=>gh(p,{},'?t='+Date.now());
+const put=(p,b64,m,sha)=>gh(p,{method:'PUT',body:JSON.stringify({message:m,content:b64,sha})});
+const del=(p,sha,m)=>gh(p,{method:'DELETE',body:JSON.stringify({message:m,sha})});
+async function run(fn){try{await fn()}catch(e){msg(e.message||'Algo deu errado.',false)}}
+
+$('go').onclick=()=>run(async()=>{S={repo:$('rp').value.trim().replace(/^https?:\/\/github\.com\//,'').replace(/\/$/,''),token:$('tk').value.trim()};
+ const r=await fetch('https://api.github.com/repos/'+S.repo,{headers:{Authorization:'Bearer '+S.token}});if(!r.ok){S=null;throw new Error('Não consegui entrar. Confira o repositório e o código.')}
+ localStorage.setItem('rnv',JSON.stringify(S));start()});
+$('out').onclick=()=>{localStorage.removeItem('rnv');location.reload()};
+document.querySelectorAll('.tabs [data-t]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs [data-t]').forEach(x=>x.classList.toggle('on',x==b));['f','v','p'].forEach(k=>$('t'+k).hidden=k!=b.dataset.t)});
+function start(){$('login').hidden=true;$('app').hidden=false;$('nd').value=$('vd').value=$('pd').value=today();run(async()=>{await albums();await vids();await posts()})}
+if(S)start();else $('login').hidden=false;
+
+/* FOTOS */
+async function albums(sel){const l=(await get('fotos'))||[];const d=l.filter(x=>x.type=='dir').map(x=>x.name).sort().reverse();
+ $('al').innerHTML='<option value="">➕ Novo álbum</option>'+d.map(n=>`<option>${n}</option>`).join('');if(sel)$('al').value=sel;album()}
+$('al').onchange=album;
+async function album(){const n=$('al').value;$('nw').hidden=!!n;$('da').hidden=!n;$('ph').innerHTML='';if(!n)return;
+ const l=(await get('fotos/'+n))||[];$('ph').innerHTML='<div class="g">'+l.filter(x=>/\.(jpe?g|png|webp)$/i.test(x.name)).map(x=>`<div><img src="${x.download_url}" alt="${x.name}"><button class="d" data-p="${x.path}" data-s="${x.sha}" aria-label="Excluir foto">✕</button></div>`).join('')+'</div>'}
+$('ph').onclick=e=>{const b=e.target.closest('button[data-p]');if(!b||!confirm('Excluir esta foto?'))return;run(async()=>{await del(b.dataset.p,b.dataset.s,'Excluir foto');msg('Foto excluída!');album()})};
+$('da').onclick=()=>{if(!confirm('Excluir o álbum INTEIRO e todas as fotos dele?'))return;run(async()=>{const n=$('al').value;for(const x of await get('fotos/'+n))await del(x.path,x.sha,'Excluir álbum '+n);msg('Álbum excluído!');albums()})};
+async function shrink(f){const bm=await createImageBitmap(f,{imageOrientation:'from-image'});const k=Math.min(1,2000/Math.max(bm.width,bm.height));
+ const c=document.createElement('canvas');c.width=bm.width*k;c.height=bm.height*k;c.getContext('2d').drawImage(bm,0,0,c.width,c.height);
+ return new Promise(r=>c.toBlob(b=>{const fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.readAsDataURL(b)},'image/jpeg',.85))}
+$('up').onclick=()=>run(async()=>{let n=$('al').value;const fs=[...$('fi').files];if(!fs.length)throw new Error('Escolha as fotos primeiro.');
+ if(!n){const nm=$('nn').value.trim();if(!nm)throw new Error('Digite o nome do novo álbum.');n=($('nd').value||today())+'-'+slug(nm)}
+ $('up').disabled=true;$('pg').hidden=false;$('pg').max=fs.length;$('pg').value=0;const t=Date.now();
+ try{for(let i=0;i<fs.length;i++){await put('fotos/'+n+'/'+t+'-'+String(i).padStart(3,'0')+'.jpg',await shrink(fs[i]),'Adicionar foto');$('pg').value=i+1}
+ msg('Fotos enviadas com sucesso!');$('fi').value='';$('nn').value='';await albums(n)}finally{$('up').disabled=false;$('pg').hidden=true}});
+
+/* VÍDEOS */
+let VF=null;async function vids(){VF=await get('videos.txt');const L=VF?dec(VF.content).split('\n'):[];
+ $('vl').innerHTML=L.map((x,i)=>[x,i]).filter(([x])=>x.trim()&&!x.trim().startsWith('#')).map(([x,i])=>`<div class="row"><span>${x.split('|')[1]||x.split('|')[0]}</span><button class="d" data-i="${i}">Excluir</button></div>`).join('')||'<p class="mu">Nenhum vídeo ainda.</p>'}
+async function saveV(L,m){await put('videos.txt',enc(L.join('\n')),m,VF&&VF.sha);msg('Salvo com sucesso!');vids()}
+$('va').onclick=()=>run(async()=>{const u=$('vu').value.trim();if(!/^https?:\/\//.test(u))throw new Error('Cole o link completo do vídeo.');
+ const L=VF?dec(VF.content).split('\n'):[];L.push(u+' | '+($('vt').value.trim()||'Vídeo').replace(/\|/g,'-')+' | '+$('vd').value);$('vu').value=$('vt').value='';await saveV(L,'Adicionar vídeo')});
+$('vl').onclick=e=>{const b=e.target.closest('button[data-i]');if(!b||!confirm('Excluir este vídeo?'))return;run(async()=>{const L=dec(VF.content).split('\n');L.splice(+b.dataset.i,1);await saveV(L,'Excluir vídeo')})};
+
+/* POSTS */
+async function posts(){const l=((await get('posts'))||[]).filter(x=>/\.md$/.test(x.name)).sort((a,b)=>b.name.localeCompare(a.name));
+ $('pl').innerHTML=l.map(x=>`<div class="row"><span>${x.name.replace('.md','')}</span><span><button class="s" style="margin:0;padding:8px 12px" data-e="${x.path}">Editar</button> <button class="d" data-p="${x.path}" data-s="${x.sha}">Excluir</button></span></div>`).join('')||'<p class="mu">Nenhum post ainda.</p>'}
+function reset(){edit=null;$('pt').value=$('pb').value='';$('pd').disabled=false;$('ps').textContent='Publicar post';$('pc').hidden=true}$('pc').onclick=reset;
+$('ps').onclick=()=>run(async()=>{const t=$('pt').value.trim();if(!t)throw new Error('Digite o título.');const body='# '+t+'\n'+$('pb').value.trim()+'\n';
+ if(edit)await put(edit.path,enc(body),'Editar post',edit.sha);else await put('posts/'+($('pd').value||today())+'-'+slug(t)+'.md',enc(body),'Novo post');
+ msg('Post salvo com sucesso!');reset();posts()});
+$('pl').onclick=e=>{const b=e.target.closest('button');if(!b)return;run(async()=>{
+ if(b.dataset.e){const f=await get(b.dataset.e);const L=dec(f.content).trim().split('\n');edit={path:f.path,sha:f.sha};$('pt').value=L[0].replace(/^#\s*/,'');$('pb').value=L.slice(1).join('\n').trim();$('pd').disabled=true;$('ps').textContent='Salvar alterações';$('pc').hidden=false;scrollTo(0,0)}
+ else if(b.dataset.p&&confirm('Excluir este post?')){await del(b.dataset.p,b.dataset.s,'Excluir post');msg('Post excluído!');posts()}})};
+</script></body></html>

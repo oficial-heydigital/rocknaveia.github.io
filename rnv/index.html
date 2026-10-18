@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rock na Véia – Rock de verdade não tem idade</title>
+<meta name="description" content="Site oficial da banda Rock na Véia: agenda de shows, fotos, vídeos e contratação.">
+<meta property="og:title" content="Rock na Véia"><meta property="og:description" content="Rock de verdade não tem idade. Tem atitude."><meta property="og:image" content="assets/og.jpg"><meta property="og:type" content="website">
+<link rel="icon" href="assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--y:#E8B923;--p:#E82A8E;--b:#1B7FB5;--bg:#0D0D0D;--bg2:#14141A;--tx:#F3F3F5;--mu:#B4B4BF;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0D0D0D}}
+*,*::before,*::after{box-sizing:inherit}html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.65 Inter,system-ui,sans-serif}
+h1,h2,h3{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;letter-spacing:.02em;line-height:1.05;margin:0}
+h2{font-size:clamp(2rem,5vw,3rem);color:var(--y)}h2::after{content:"";display:block;width:64px;height:3px;margin-top:10px;background:linear-gradient(90deg,var(--p),var(--b));border-radius:2px}
+a{color:inherit}.w{max-width:1080px;margin:0 auto;padding:72px 20px}
+header{position:sticky;top:0;z-index:9;background:rgba(13,13,13,.92);backdrop-filter:blur(8px);border-bottom:1px solid #26262e}
+.nav{max-width:1080px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.nav img{height:34px;display:block}.nav nav{display:flex;gap:22px;flex-wrap:wrap}
+.nav nav a{text-decoration:none;color:var(--mu);font-weight:600;font-size:.95rem}.nav nav a:hover{color:var(--y)}
+@media(max-width:760px){.nav nav{display:none}}
+.btn{display:inline-block;padding:14px 26px;border-radius:10px;font-weight:600;text-decoration:none;transition:.2s}
+.b1{background:var(--y);color:#0D0D0D}.b1:hover{background:#f5cc42}.b2{border:2px solid var(--b);color:var(--tx)}.b2:hover{background:var(--b)}
+.hero{text-align:center;background:radial-gradient(circle at 50% 30%,#1d1d27,var(--bg) 70%)}
+.hero img{width:min(300px,70vw);height:auto;filter:drop-shadow(0 12px 30px rgba(232,42,142,.25))}
+.hero h1{font-size:clamp(2.4rem,7vw,4.5rem);margin:24px 0 8px}.hero h1 span{color:var(--y)}
+.hero p{color:var(--mu);max-width:560px;margin:0 auto 28px}.hero .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.grid{display:grid;gap:16px;margin-top:32px}.ev{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:var(--bg2);border:1px solid #26262e;border-radius:12px;padding:22px;box-shadow:0 6px 20px rgba(0,0,0,.35)}
+.card.big{grid-column:1/-1;border-color:var(--y);display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.date{text-align:center;min-width:76px;color:var(--y)}.date b{display:block;font:3.4rem/1 'Bebas Neue',Impact,sans-serif}.date span{font-weight:600;letter-spacing:.12em;color:var(--p)}
+.card h3{font-size:1.7rem}.card p{margin:4px 0;color:var(--mu)}.card a.l{color:var(--y);font-weight:600}
+.note{font-size:.85rem;color:var(--mu);margin-top:16px}
+.alt{background:var(--bg2)}.alt .card{background:var(--bg)}
+.mem{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.mem h3{color:var(--tx)}.mem p{color:var(--p);font-weight:600}
+.ph{aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,var(--bg2),#22222c);border:1px dashed #3a3a46;display:grid;place-items:center;color:var(--mu);font-size:.9rem}
+.cta{text-align:center;background:linear-gradient(135deg,rgba(232,42,142,.18),rgba(27,127,181,.18))}
+.cta h2::after{margin:10px auto 0}.cta p{color:var(--mu)}
+footer{border-top:1px solid #26262e;text-align:center;padding:40px 20px;color:var(--mu);font-size:.9rem}
+footer img{height:44px;margin-bottom:14px}footer .s{display:flex;gap:20px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}footer .s a{color:var(--tx);text-decoration:none;font-weight:600}footer .s a:hover{color:var(--y)}
+.wa{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#25D366;color:#0D0D0D;font-weight:600;text-decoration:none;padding:13px 20px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+a:focus-visible,.btn:focus-visible{outline:3px solid var(--p);outline-offset:3px}
+.fade{animation:f .6s ease both}@keyframes f{from{opacity:0;transform:translateY(8px)}}
+@media(prefers-reduced-motion:reduce){.fade{animation:none}}
+.th{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;display:block;cursor:pointer;background:var(--bg2)}
+.alb{padding:0;overflow:hidden;cursor:pointer;text-align:left;color:inherit;font:inherit}.alb img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}.alb div{padding:14px 18px}
+.vt{position:relative;display:block}
+.pm{white-space:pre-line}.dt{color:var(--p)!important;font-weight:600;font-size:.85rem}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:20;display:none;align-items:center;justify-content:center;padding:20px}#lb.on{display:flex}
+#lb img{max-width:100%;max-height:88vh;border-radius:8px}#lb iframe{width:min(900px,100%);aspect-ratio:16/9;border:0;border-radius:8px}
+#lb button{position:absolute;background:#222;color:#fff;border:0;border-radius:50%;width:48px;height:48px;font-size:1.4rem;cursor:pointer}
+#lx{top:16px;right:16px}#lp{left:12px;top:50%}#ln{right:12px;top:50%}
+</style></head><body>
+<header><div class="nav"><a href="#inicio"><img src="assets/nome.png" alt="Rock na Véia"></a>
+<nav><a href="#inicio">Início</a><a href="#agenda">Agenda</a><a href="#galeria">Galeria</a><a href="#videos">Vídeos</a><a href="#novidades">Novidades</a><a href="#banda">A Banda</a><a href="#contato">Contato</a></nav></div></header>
+<main>
+<section id="inicio" class="hero"><div class="w fade">
+<img src="assets/logo.png" alt="Selo da banda Rock na Véia: senhora de cabelos prateados tocando guitarra">
+<h1>Rock de verdade não tem idade.<br><span>Tem atitude.</span></h1>
+<p>Rock clássico com a energia de quem já viu de tudo e continua subindo no palco. Vem ouvir.</p>
+<div class="btns"><a class="btn b1" href="#agenda">Ver próximos shows</a><a class="btn b2" href="#contato">Contratar a banda</a></div></div></section>
+
+<section id="agenda"><div class="w"><h2>Próximos shows</h2>
+<div class="grid ev" id="events"></div>
+</div></section>
+
+<section id="galeria" class="alt"><div class="w"><h2>Galeria</h2>
+<div class="grid ev" id="albums"></div><div id="album" hidden><p><button class="btn b2" id="back">← Voltar aos álbuns</button></p><h3 id="atitle" style="margin-top:16px;font-size:2rem"></h3><div class="grid" id="photos" style="grid-template-columns:repeat(auto-fill,minmax(170px,1fr))"></div></div></div></section>
+<section id="videos"><div class="w"><h2>Vídeos</h2><div class="grid ev" id="vids"></div></div></section>
+
+<section id="novidades" class="alt"><div class="w"><h2>Novidades</h2><div class="grid ev" id="posts"></div></div></section>
+
+<section id="banda"><div class="w"><h2>A Banda</h2>
+<p style="max-width:680px">Formada em <b>2010</b>, a Rock na Véia mistura rock clássico com influências contemporâneas, letras envolventes e muito bom humor. Prova de que guitarra alta não tem prazo de validade.</p>
+<div class="grid mem"><div class="card"><h3>Marcos</h3><p>Vocal</p></div><div class="card"><h3>Rogério</h3><p>Guitarra</p></div><div class="card"><h3>Dinho</h3><p>Baixo</p></div><div class="card"><h3>Renk</h3><p>Bateria</p></div></div></div></section>
+
+<section id="contato" class="cta"><div class="w"><h2>Contrate a banda</h2>
+<p>Casamentos, festas, bares e eventos. Chama a gente e conta a data e a cidade.</p>
+<p style="margin:24px 0"><a class="btn b1" href="https://wa.me/5511987135885?text=Ol%C3%A1%2C%20Rock%20na%20V%C3%A9ia!%20Vi%20o%20site%20de%20voc%C3%AAs%20e%20quero%20contratar%20a%20banda%20para%20um%20evento.%20Podemos%20conversar%3F%20%F0%9F%8E%B8" target="_blank" rel="noopener">Chamar no WhatsApp</a> <a class="btn b2" href="mailto:oficialrocknaveia@gmail.com">oficialrocknaveia@gmail.com</a></p>
+<p>(11) 98713-5885 · <a href="https://www.instagram.com/rocknaveiaoficial/" target="_blank" rel="noopener">@rocknaveiaoficial</a></p></div></section>
+</main>
+<div id="lb" role="dialog" aria-modal="true"><button id="lx" aria-label="Fechar">✕</button><button id="lp" aria-label="Anterior">‹</button><div id="lc"></div><button id="ln" aria-label="Próxima">›</button></div>
+<footer><img src="assets/nome.png" alt="Rock na Véia">
+<div class="s"><a href="https://www.instagram.com/rocknaveiaoficial/" target="_blank" rel="noopener">Instagram</a><a href="mailto:oficialrocknaveia@gmail.com">E-mail</a></div>
+© <span id="yr"></span> Rock na Véia. Todos os direitos reservados.</footer>
+<a class="wa" href="https://wa.me/5511987135885?text=Ol%C3%A1%2C%20Rock%20na%20V%C3%A9ia!%20Vi%20o%20site%20de%20voc%C3%AAs%20e%20gostaria%20de%20conversar.%20%F0%9F%8E%B8" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">WhatsApp</a>
+<script src="config.js"></script>
+<script src="assets/app.js"></script></body></html>
