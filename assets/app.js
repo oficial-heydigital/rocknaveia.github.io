@@ -30,7 +30,7 @@ $('lb').addEventListener('touchend',function(e){var d=e.changedTouches[0].client
 fetch('data/site.json').then(function(r){return r.json()}).then(function(D){
  if(!(C.calendarId&&C.apiKey))drawEvents(D.events||[]);
  var A=D.albums||[];
- $('albums').innerHTML=A.length?A.map(function(a,i){return'<button class="card alb" data-i="'+i+'"><img loading="lazy" alt="Capa do álbum '+esc(a.title)+'" src="'+a.cover+'"><div><h3>'+esc(a.title)+'</h3><p>'+(a.date?fd(a.date)+' · ':'')+a.photos.length+' fotos</p></div></button>'}).join(''):'<p>Em breve, fotos dos nossos shows!</p>';
+ $('albums').innerHTML=A.length?A.map(function(a,i){return'<button class="card alb" data-i="'+i+'"><img loading="lazy" alt="Capa do álbum '+esc(a.title)+'" src="'+a.photos[0].full+'"><div><h3>'+esc(a.title)+'</h3><p>'+(a.date?fd(a.date)+' · ':'')+a.photos.length+' fotos</p></div></button>'}).join(''):'<p>Em breve, fotos dos nossos shows!</p>';
  $('albums').onclick=function(e){var b=e.target.closest('.alb');if(!b)return;var a=A[b.dataset.i];
   $('atitle').textContent=a.title;$('photos').innerHTML=a.photos.map(function(p,k){return'<img class="th" loading="lazy" alt="Foto '+(k+1)+' de '+esc(a.title)+'" data-k="'+k+'" src="'+p.thumb+'">'}).join('');
   $('photos').onclick=function(ev){var k=ev.target.dataset.k;if(k==null)return;list=a.photos.map(function(p){return p.full});idx=+k;show()};
