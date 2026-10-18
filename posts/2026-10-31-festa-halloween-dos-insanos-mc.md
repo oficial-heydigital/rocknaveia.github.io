@@ -1,4 +1,4 @@
-# ⚡ FESTA HALLOWEEN DOS INSANOS MC ⚡🎃
+# ⚡ FESTA HALLOWEEN DOS INSANOS MC ⚡
 🎃⚡ FESTA HALLOWEEN DOS INSANOS MC ⚡🎃
 
 Uma noite de puro Rock ’n’ Roll, clima sombrio e muita energia! Duas pedradas no palco para estremecer a sede:
