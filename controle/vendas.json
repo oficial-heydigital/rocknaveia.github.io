@@ -1,0 +1,38 @@
+{
+ "v": 1,
+ "produtos": [
+  {
+   "id": "p1",
+   "nome": "Bottons personalizados 4,5cm",
+   "qtd": 100,
+   "custo": 124,
+   "preco": 0,
+   "recebido": true
+  },
+  {
+   "id": "p2",
+   "nome": "Chaveiros de alumínio",
+   "qtd": 25,
+   "custo": 280,
+   "preco": 0,
+   "recebido": false
+  },
+  {
+   "id": "p3",
+   "nome": "Copos personalizados 473mL",
+   "qtd": 50,
+   "custo": 460,
+   "preco": 0,
+   "recebido": false
+  },
+  {
+   "id": "p4",
+   "nome": "Palhetas nylon frente e verso",
+   "qtd": 20,
+   "custo": 323.25,
+   "preco": 0,
+   "recebido": false
+  }
+ ],
+ "movs": []
+}
