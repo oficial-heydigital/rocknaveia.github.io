@@ -2,6 +2,8 @@ name: Publicar site
 on:
   push:
     branches: [main, master]
+    paths-ignore:
+      - "controle/**"
   workflow_dispatch:
 permissions:
   contents: read

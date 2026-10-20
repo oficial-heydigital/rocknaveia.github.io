@@ -55,6 +55,17 @@ Se preencher o `config.js` com o Google Agenda (seção abaixo), o Google passa 
 ## Posts com fotos e vídeos
 Na aba **📰 Posts** você pode anexar várias fotos, colar links do YouTube (um por linha) e enviar um vídeo curto do celular de até 25 MB. Vídeos maiores devem ir para o YouTube. Ao editar um post, dá para remover fotos e vídeos dele.
 
+## Controle de vendas (pelo admin)
+Na página `/admin/`, aba **💰 Vendas**. Já vem com os produtos da compra (bottons, chaveiros, copos e palhetas), com quantidade e custo.
+- **Produtos e estoque:** cada produto mostra quanto ainda tem, quanto foi vendido e o lucro por unidade. Em **Editar** dá para mudar nome, quantidade comprada, custo e preço de venda. A caixa **Recebido** marca que o produto já chegou.
+- **Cadastrar produto e foto:** o botão **Cadastrar produto** pede nome, quantidade, custo, preço e foto. A foto pode ser escolhida da galeria, arrastada para a janela, colada com Ctrl+V (uma imagem copiada) ou informada por link. Se o site do link permitir, a imagem é copiada para `controle/fotos/`; se não, fica só o link.
+- **Registrar venda:** escolha o produto, a quantidade, o preço e a forma de pagamento (Pix, dinheiro ou cartão). O estoque desce sozinho. Não deixa vender mais do que tem.
+- **Baixa de estoque:** para brinde, defeito ou perda. Tira do estoque sem entrar como venda.
+- **Vendas:** histórico com filtro por produto, edição, exclusão (o estoque volta) e botão para baixar a planilha (CSV, abre no Excel).
+- **Resumo no topo:** quanto foi investido, faturado, o lucro e quanto falta para recuperar o investimento.
+
+Os dados ficam no arquivo `controle/vendas.json`. Esse arquivo **não aparece no site**, mas o repositório é público: não anote telefone nem dados pessoais de compradores. Salvar uma venda não republica o site.
+
 ## Posts do Instagram
 Na página `/admin/`, aba **📸 Instagram**: no Instagram, abra o post, toque nos três pontinhos → **Copiar link** e cole no admin. O post aparece na seção **No Instagram** do site (os 6 mais recentes) em 1 a 2 minutos, com foto, vídeo e legenda originais. Funciona com o perfil público @rocknaveiaoficial. Enquanto não houver nenhum post cadastrado, a seção fica escondida. Atenção: essa seção carrega scripts do Instagram, o que pode exigir um aviso de cookies (LGPD).
 
@@ -79,7 +90,7 @@ Depois, basta criar o evento no Google Agenda, com título, data/hora e **local*
 Estão no arquivo `index.html`. Busque o texto (Ctrl+F no editor do GitHub) e altere. WhatsApp (11 98713-5885), e-mail (oficialrocknaveia@gmail.com) e Instagram (@rocknaveiaoficial) ficam na seção "Contrate a banda", no rodapé e no botão flutuante do WhatsApp. O texto da mensagem automática está dentro do link `wa.me`, depois de `?text=`.
 
 ## Estrutura
-`index.html` (página) · `agenda.json` (shows) · `instagram.json` (posts do Instagram) · `midia/` (fotos e vídeos dos posts) · `config.js` (agenda) · `assets/` (logos e script) · `fotos/` · `posts/` · `videos.txt` · `build.py` e `.github/workflows/publicar.yml` (automação; não precisa mexer).
+`index.html` (página) · `controle/vendas.json` (controle de vendas) · `agenda.json` (shows) · `instagram.json` (posts do Instagram) · `midia/` (fotos e vídeos dos posts) · `config.js` (agenda) · `assets/` (logos e script) · `fotos/` · `posts/` · `videos.txt` · `build.py` e `.github/workflows/publicar.yml` (automação; não precisa mexer).
 
 ## Testar no computador (opcional)
 `pip install pillow && python build.py && python -m http.server -d _site`
