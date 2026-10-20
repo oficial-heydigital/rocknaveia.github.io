@@ -5,9 +5,10 @@
    "id": "p1",
    "nome": "Bottons personalizados 4,5cm",
    "qtd": 100,
-   "custo": 124,
-   "preco": 0,
-   "recebido": false
+   "custo": 117,
+   "preco": 590,
+   "recebido": false,
+   "foto": "controle/fotos/mvg52wto.jpg"
   },
   {
    "id": "p2",
@@ -15,7 +16,8 @@
    "qtd": 25,
    "custo": 280,
    "preco": 0,
-   "recebido": false
+   "recebido": false,
+   "foto": ""
   },
   {
    "id": "p3",
@@ -23,7 +25,8 @@
    "qtd": 50,
    "custo": 460,
    "preco": 0,
-   "recebido": false
+   "recebido": false,
+   "foto": ""
   },
   {
    "id": "p4",
@@ -31,7 +34,8 @@
    "qtd": 20,
    "custo": 323.25,
    "preco": 0,
-   "recebido": false
+   "recebido": false,
+   "foto": ""
   }
  ],
  "movs": []
