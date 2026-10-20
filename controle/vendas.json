@@ -38,17 +38,5 @@
    "foto": "controle/fotos/mvg5ggyb.jpg"
   }
  ],
- "movs": [
-  {
-   "tipo": "venda",
-   "produto": "p1",
-   "qtd": 1,
-   "data": "2026-10-20",
-   "obs": "Show1",
-   "preco": 590,
-   "pgto": "pix",
-   "id": "mmvg6nxjcxkc",
-   "c": 1792470515592
-  }
- ]
+ "movs": []
 }
