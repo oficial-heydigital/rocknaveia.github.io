@@ -60,6 +60,17 @@
    "pgto": "pix",
    "id": "mmvjxbm11ynf",
    "c": 1792696688965
+  },
+  {
+   "tipo": "venda",
+   "produto": "p2",
+   "qtd": 1,
+   "data": "2026-10-22",
+   "obs": "1 chave - FERNANDA PRI",
+   "preco": 800,
+   "pgto": "pix",
+   "id": "mmvjxc6yo6oi",
+   "c": 1792696716096
   }
  ]
 }
