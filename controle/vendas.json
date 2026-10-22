@@ -71,6 +71,17 @@
    "pgto": "pix",
    "id": "mmvjxc6yo6oi",
    "c": 1792696716096
+  },
+  {
+   "tipo": "venda",
+   "produto": "p2",
+   "qtd": 1,
+   "data": "2026-10-22",
+   "obs": "1 chav - Renk",
+   "preco": 800,
+   "pgto": "cartao",
+   "id": "mmvjzv3j98eo",
+   "c": 1792700957349
   }
  ]
 }
