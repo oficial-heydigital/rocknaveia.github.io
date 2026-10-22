@@ -38,5 +38,17 @@
    "foto": "controle/fotos/mvg5ggyb.jpg"
   }
  ],
- "movs": []
+ "movs": [
+  {
+   "tipo": "venda",
+   "produto": "p2",
+   "qtd": 1,
+   "data": "2026-10-22",
+   "obs": "Priscila Silva Ribeiro",
+   "preco": 790,
+   "pgto": "pix",
+   "id": "mmvjv6r1u937",
+   "c": 1792693102962
+  }
+ ]
 }
