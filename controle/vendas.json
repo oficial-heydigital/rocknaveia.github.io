@@ -49,6 +49,17 @@
    "pgto": "pix",
    "id": "mmvjv6r1u937",
    "c": 1792693102962
+  },
+  {
+   "tipo": "venda",
+   "produto": "p3",
+   "qtd": 1,
+   "data": "2026-10-22",
+   "obs": "Copo amarelo - FERNANDA PRI",
+   "preco": 1500,
+   "pgto": "pix",
+   "id": "mmvjxbm11ynf",
+   "c": 1792696688965
   }
  ]
 }
