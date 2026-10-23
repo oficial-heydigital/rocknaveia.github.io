@@ -31,6 +31,7 @@ progress{width:100%;height:14px;margin-top:12px}
 <label for="al">Álbum</label><select id="al"></select>
 <div id="nw"><label for="nn">Nome do novo álbum</label><input id="nn" placeholder="ex.: Show no Bar do Zé"><label for="nd">Data</label><input id="nd" type="date"></div>
 <label for="fi">Escolher fotos (pode marcar várias)</label><input id="fi" type="file" accept="image/*" multiple>
+<p id="fst" class="mu" hidden style="white-space:pre-line"></p>
 <button id="up">Enviar fotos</button><progress id="pg" hidden></progress>
 <div id="ph"></div><button class="d" id="da" hidden style="margin-top:16px;padding:12px">Excluir álbum inteiro</button></div>
 
@@ -89,29 +90,62 @@ async function album(){const n=$('al').value;$('nw').hidden=!!n;$('da').hidden=!
  const l=(await get('fotos/'+n))||[];$('ph').innerHTML='<div class="g">'+l.filter(x=>/\.(jpe?g|png|webp)$/i.test(x.name)).map(x=>`<div><img src="${x.download_url}" alt="${x.name}"><button class="d" data-p="${x.path}" data-s="${x.sha}" aria-label="Excluir foto">✕</button></div>`).join('')+'</div>'}
 $('ph').onclick=e=>{const b=e.target.closest('button[data-p]');if(!b||!confirm('Excluir esta foto?'))return;run(async()=>{await del(b.dataset.p,b.dataset.s,'Excluir foto');msg('Foto excluída!');album()})};
 $('da').onclick=()=>{if(!confirm('Excluir o álbum INTEIRO e todas as fotos dele?'))return;run(async()=>{const n=$('al').value;for(const x of await get('fotos/'+n))await del(x.path,x.sha,'Excluir álbum '+n);msg('Álbum excluído!');albums()})};
-/* Lê a foto com plano B: createImageBitmap (com e sem orientação) e depois <img>. Dá mensagem clara se o formato não abrir. */
+/* Lê a foto com vários planos B. Copia o arquivo para a memória na hora (o Android às vezes perde o acesso depois),
+   descobre o tipo real pelo conteúdo e tenta decodificar de jeitos cada vez mais leves. */
+const fmtMB=n=>n<1048576?Math.max(1,Math.round(n/1024))+' KB':(n/1048576).toFixed(1).replace('.',',')+' MB';
+function sniff(u){const h=(...a)=>a.every((v,i)=>u[i]===v);
+ if(h(0xFF,0xD8,0xFF))return'image/jpeg';if(h(0x89,0x50,0x4E,0x47))return'image/png';if(h(0x47,0x49,0x46,0x38))return'image/gif';if(h(0x42,0x4D))return'image/bmp';
+ if(h(0x52,0x49,0x46,0x46)&&u[8]==0x57&&u[9]==0x45)return'image/webp';
+ if(u[4]==0x66&&u[5]==0x74&&u[6]==0x79&&u[7]==0x70){const b=String.fromCharCode(u[8],u[9],u[10],u[11]);return/^(heic|heix|hevc|heim|heis|mif1|msf1)/.test(b)?'image/heic':/^avi[fs]/.test(b)?'image/avif':''}
+ return''}
 async function loadBitmap(f){const nm=(f&&f.name)||'imagem';
- if(!f||!f.size)throw new Error('O arquivo "'+nm+'" está vazio. Se a foto está na nuvem (iCloud, Google Fotos), baixe para o aparelho antes de enviar.');
- for(const o of [{imageOrientation:'from-image'},undefined]){try{return await createImageBitmap(f,o)}catch(e){}}
- const u=URL.createObjectURL(f);
+ if(!f||!f.size)throw new Error('"'+nm+'" está vazio. Se a foto está na nuvem (Google Fotos, iCloud), baixe para o aparelho e escolha de novo.');
+ let buf;try{buf=await f.arrayBuffer()}catch(e){throw new Error('"'+nm+'": o aparelho não liberou o arquivo para leitura. Se a foto está na nuvem, baixe antes e escolha de novo.')}
+ const type=sniff(new Uint8Array(buf,0,Math.min(32,buf.byteLength))),blob=new Blob([buf],{type:type||f.type||'image/jpeg'});
+ let last='';
+ for(const o of [{imageOrientation:'from-image'},undefined,{imageOrientation:'from-image',resizeWidth:3000,resizeQuality:'low'},{imageOrientation:'from-image',resizeWidth:1600,resizeQuality:'low'}]){
+  try{return await createImageBitmap(blob,o)}catch(e){last=(e&&e.name)||'erro'}}
+ const u=URL.createObjectURL(blob);
  try{const im=new Image();im.src=u;await im.decode();return{src:im,width:im.naturalWidth,height:im.naturalHeight}}
- catch(e){const heic=/hei[cf]/i.test(f.type||'')||/\.hei[cf]$/i.test(nm);
-  throw new Error('Não consegui abrir "'+nm+'". '+(heic?'Este navegador não lê fotos HEIC. No iPhone, vá em Ajustes > Câmera > Formatos > Mais Compatível (ou abra o admin pelo Safari). No computador, converta a foto para JPG.':'Tente outra foto, em JPG, PNG ou WebP.'))}
- finally{setTimeout(()=>URL.revokeObjectURL(u),30000)}}
+ catch(e){last=(e&&e.name)||last}
+ finally{setTimeout(()=>URL.revokeObjectURL(u),30000)}
+ const heic=type=='image/heic'||/\.hei[cf]$/i.test(nm);
+ throw new Error('"'+nm+'" ('+fmtMB(f.size)+'): '+(heic?'foto em HEIC, que este navegador não lê. No iPhone, use Ajustes > Câmera > Formatos > Mais Compatível; no computador, converta para JPG.'
+  :type=='image/avif'?'formato AVIF que este navegador não lê. Converta para JPG.'
+  :!type?'não parece ser uma imagem ou está corrompido.'
+  :'a foto está corrompida ou é pesada demais para a memória do aparelho.')+' ['+last+']')}
 async function shrink(f,max=2000){const nm=(f&&f.name)||'imagem',bm=await loadBitmap(f),w=bm.width,h=bm.height;
- if(!w||!h)throw new Error('Não consegui abrir "'+nm+'".');
+ if(!w||!h)throw new Error('"'+nm+'": imagem sem tamanho.');
  const k=Math.min(1,max/Math.max(w,h)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(w*k));c.height=Math.max(1,Math.round(h*k));
  const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(bm.src||bm,0,0,c.width,c.height);if(bm.close)bm.close();
- return new Promise((r,j)=>c.toBlob(b=>{if(!b)return j(new Error('Não consegui processar "'+nm+'". A foto pode ser grande demais para este aparelho.'));
-  const fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.onerror=()=>j(new Error('Falha ao ler "'+nm+'".'));fr.readAsDataURL(b)},'image/jpeg',.85))}
-$('up').onclick=()=>run(async()=>{let n=$('al').value;const fs=[...$('fi').files];if(!fs.length)throw new Error('Escolha as fotos primeiro.');
+ return new Promise((r,j)=>c.toBlob(b=>{if(!b)return j(new Error('"'+nm+'": não consegui processar (foto grande demais para este aparelho).'));
+  const fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.onerror=()=>j(new Error('"'+nm+'": falha ao ler.'));fr.readAsDataURL(b)},'image/jpeg',.85))}
+/* Fotos do álbum: preparadas assim que são escolhidas; as que não abrem ficam de fora e não travam as outras. */
+const FR={list:[],bad:[],run:null,tok:0};
+const badTxt=b=>b.length+(b.length>1?' fotos não puderam ser abertas e ficam de fora:':' foto não pôde ser aberta e fica de fora:')+'\n'+b.slice(0,6).map(x=>'• '+x).join('\n')+(b.length>6?'\n• e mais '+(b.length-6)+'…':'');
+async function prepFotos(){const tok=++FR.tok,fs=[...$('fi').files],st=$('fst');FR.list=[];FR.bad=[];
+ if(!fs.length){st.hidden=true;return}
+ st.hidden=false;
+ for(let i=0;i<fs.length;i++){if(tok!=FR.tok)return;st.textContent='Preparando fotos… '+(i+1)+' de '+fs.length;
+  try{FR.list.push({name:fs[i].name,b64:await shrink(fs[i])})}catch(e){FR.bad.push(e.message||('"'+fs[i].name+'"'))}}
+ if(tok!=FR.tok)return;
+ st.textContent=FR.list.length+(FR.list.length==1?' foto pronta para enviar.':' fotos prontas para enviar.')+(FR.bad.length?'\n\n'+badTxt(FR.bad):'')}
+$('fi').onchange=()=>{FR.run=prepFotos()};
+$('up').onclick=()=>run(async()=>{let n=$('al').value;if(FR.run)await FR.run;const fs=FR.list;
+ if(!fs.length)throw new Error(FR.bad.length?'Nenhuma das fotos escolhidas pôde ser aberta. Veja o motivo logo acima do botão.':'Escolha as fotos primeiro.');
  if(!n){const nm=$('nn').value.trim();if(!nm)throw new Error('Digite o nome do novo álbum.');n=($('nd').value||today())+'-'+slug(nm)}
  $('up').disabled=true;$('pg').hidden=false;$('pg').max=fs.length;$('pg').value=0;const t=Date.now();
- try{let ok=0;const bad=[];for(let i=0;i<fs.length;i++){let b64;try{b64=await shrink(fs[i])}catch(e){bad.push(e.message);$('pg').value=i+1;continue}
- await put('fotos/'+n+'/'+t+'-'+String(i).padStart(3,'0')+'.jpg',b64,'Adicionar foto');ok++;$('pg').value=i+1}
- if(!ok)throw new Error(bad[0]);
- if(bad.length)msg(ok+(ok>1?' fotos enviadas':' foto enviada')+'. '+bad.length+' não abriu: '+bad[0],false);else msg('Fotos enviadas com sucesso!');
- $('fi').value='';$('nn').value='';await albums(n)}finally{$('up').disabled=false;$('pg').hidden=true}});
+ try{let ok=0;const fail=[];
+  for(let i=0;i<fs.length;i++){const path='fotos/'+n+'/'+t+'-'+String(i).padStart(3,'0')+'.jpg';
+   try{try{await put(path,fs[i].b64,'Adicionar foto')}catch(e){if(e.status==401||e.status==403)throw e;await put(path,fs[i].b64,'Adicionar foto')}ok++}
+   catch(e){if(e.status==401||e.status==403)throw e;fail.push('"'+fs[i].name+'": não consegui enviar ('+(e.message||'erro')+')')}
+   $('pg').value=i+1}
+  const bad=FR.bad.concat(fail);
+  if(!ok)throw new Error(bad[0]||'Não consegui enviar.');
+  msg(ok+(ok>1?' fotos enviadas':' foto enviada')+(bad.length?'. '+bad.length+(bad.length>1?' ficaram de fora (veja abaixo).':' ficou de fora (veja abaixo).'):' com sucesso!'),!bad.length);
+  $('fi').value='';$('nn').value='';FR.list=[];FR.bad=[];FR.tok++;
+  const st=$('fst');if(bad.length){st.hidden=false;st.textContent=badTxt(bad)}else st.hidden=true;
+  await albums(n)}finally{$('up').disabled=false;$('pg').hidden=true}});
 
 /* VÍDEOS */
 let VF=null;async function vids(){VF=await get('videos.txt');const L=VF?dec(VF.content).split('\n'):[];
@@ -150,13 +184,13 @@ function reset(){edit=null;pim=[];pvd=[];rm=[];['pt','pb','pv'].forEach(k=>$(k).
 $('ps').onclick=()=>run(async()=>{const t=$('pt').value.trim();if(!t)throw new Error('Digite o título.');
  const ph=[...$('pp').files],vf=$('pf').files[0];if(vf&&vf.size>25*1024*1024)throw new Error('O vídeo passou de 25 MB. Envie-o ao YouTube e cole o link.');
  $('ps').disabled=true;$('pgp').hidden=false;$('pgp').max=ph.length+(vf?1:0)+1;$('pgp').value=0;const st=Date.now();
- try{let n=0;for(let i=0;i<ph.length;i++){const p='midia/'+st+'-'+String(i).padStart(3,'0')+'.jpg';await put(p,await shrink(ph[i]),'Foto do post');pim.push(p);$('pgp').value=++n}
+ try{let n=0;const bad=[];for(let i=0;i<ph.length;i++){const p='midia/'+st+'-'+String(i).padStart(3,'0')+'.jpg';let b64;try{b64=await shrink(ph[i])}catch(e){bad.push(e.message);$('pgp').value=++n;continue}await put(p,b64,'Foto do post');pim.push(p);$('pgp').value=++n}
  if(vf){const p='midia/'+st+'-v.'+(vf.name.split('.').pop()||'mp4').toLowerCase();await put(p,await b64(vf),'Vídeo do post');pvd.push(p);$('pgp').value=++n}
  $('pv').value.split('\n').map(x=>x.trim()).filter(x=>/^https?:\/\//.test(x)).forEach(x=>pvd.push(x));
  const body='# '+t+'\n'+$('pb').value.trim()+'\n\n'+pim.map(p=>'![foto]('+p+')').concat(pvd.map(v=>'[video] '+v)).join('\n')+'\n';
  if(edit)await put(edit.path,enc(body),'Editar post',edit.sha);else await put('posts/'+($('pd').value||today())+'-'+slug(t)+'.md',enc(body),'Novo post');
  for(const p of rm){const g=await get(p);if(g)await del(p,g.sha,'Remover mídia')}
- msg('Post salvo com sucesso!');reset();posts()}finally{$('ps').disabled=false;$('pgp').hidden=true}});
+ msg(bad.length?'Post salvo. '+bad.length+(bad.length>1?' fotos não abriram e ficaram de fora: ':' foto não abriu e ficou de fora: ')+bad[0]:'Post salvo com sucesso!',!bad.length);reset();posts()}finally{$('ps').disabled=false;$('pgp').hidden=true}});
 $('pl').onclick=e=>{const b=e.target.closest('button');if(!b)return;run(async()=>{
  if(b.dataset.e){const f=await get(b.dataset.e),o=parse(dec(f.content));reset();edit={path:f.path,sha:f.sha};$('pt').value=o.t;$('pb').value=o.b;pim=o.i;pvd=o.v;$('pd').disabled=true;$('ps').textContent='Salvar alterações';$('pc').hidden=false;rend();scrollTo(0,0)}
  else if(b.dataset.p&&confirm('Excluir este post e as fotos/vídeos dele?')){const f=await get(b.dataset.p),o=parse(dec(f.content));for(const p of o.i.concat(o.v).filter(loc)){const g=await get(p);if(g)await del(p,g.sha,'Remover mídia')}

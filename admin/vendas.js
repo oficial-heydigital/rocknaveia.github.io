@@ -449,7 +449,7 @@ const pErr = t => { q('vx-perr').textContent = t; q('vx-perr').hidden = !t; };
 async function takeFile(f) {
   if (!f || !/^image\//.test(f.type || 'image/')) return pErr('Esse arquivo não é uma imagem.');
   try { pImg = await shrinkImg(f); pRemove = false; pLink = ''; q('vx-pu').value = ''; pFoto(pImg.dataUrl); pErr(''); }
-  catch (x) { pErr(x.message || 'Não consegui ler esta imagem. Escolha uma foto em JPG ou PNG.'); }
+  catch (x) { pErr('Não consegui usar esta foto: ' + (x.message || 'escolha uma imagem em JPG ou PNG.')); }
 }
 async function takeUrl(u) {
   u = (u || '').trim();
