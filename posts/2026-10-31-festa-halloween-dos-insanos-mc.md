@@ -1,12 +1,12 @@
-# ⚡ FESTA HALLOWEEN DOS INSANOS MC ⚡
-🎃⚡ FESTA HALLOWEEN DOS INSANOS MC ⚡🎃
+# ⚡FESTA HALLOWEEN⚡
+🎃⚡ FESTA HALLOWEEN ⚡🎃
 
 Uma noite de puro Rock ’n’ Roll, clima sombrio e muita energia! Duas pedradas no palco para estremecer a sede:
 
 🎸 Rock na Véia
 🎸 Pombos Errantes
 
-Vista sua melhor fantasia ou sua jaqueta de couro e venha curtir com a gente.
+Vista sua melhor fantasia e venha curtir com a gente.
 
 🗓 31 de Outubro (Sábado)
 ⏰ A partir das 17h
@@ -14,6 +14,7 @@ Vista sua melhor fantasia ou sua jaqueta de couro e venha curtir com a gente.
 
 Marque aqui quem vai colar com você nessa noite insana! 👇💀
 
-#HalloweenInsanos #InsanosMC #RockNaVeia #PombosErrantes #RockOsasco #Motoclube #HalloweenRock
+#Halloween  #RockNaVeia #PombosErrantes #RockOsasco #Motoclube #HalloweenRock
 
-![foto](midia/1792295600074-000.jpg)
+![foto](midia/1792790459716-000.jpg)
+[video] midia/1792790459716-v.mp4
