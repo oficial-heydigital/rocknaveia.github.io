@@ -36,10 +36,11 @@ const MOTIVO = {brinde:'Brinde', defeito:'Defeito', perda:'Perda', outro:'Outro'
 const fotoCache = {};
 const fotoUrl = f => /^https?:/i.test(f || '') ? f : f ? (fotoCache[f] || 'https://raw.githubusercontent.com/' + S.repo + '/HEAD/' + f) : '';
 async function shrinkImg(file, max = 900) {
-  const bm = await createImageBitmap(file, {imageOrientation:'from-image'});
+  const bm = await loadBitmap(file);                       // leitor com plano B, definido no admin
   const k = Math.min(1, max / Math.max(bm.width, bm.height));
-  const c = document.createElement('canvas'); c.width = Math.round(bm.width * k); c.height = Math.round(bm.height * k);
-  const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(bm, 0, 0, c.width, c.height);
+  const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(bm.width * k)); c.height = Math.max(1, Math.round(bm.height * k));
+  const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(bm.src || bm, 0, 0, c.width, c.height);
+  if (bm.close) bm.close();
   const dataUrl = c.toDataURL('image/jpeg', .82);
   return {dataUrl, b64:dataUrl.split(',')[1]};
 }
@@ -448,7 +449,7 @@ const pErr = t => { q('vx-perr').textContent = t; q('vx-perr').hidden = !t; };
 async function takeFile(f) {
   if (!f || !/^image\//.test(f.type || 'image/')) return pErr('Esse arquivo não é uma imagem.');
   try { pImg = await shrinkImg(f); pRemove = false; pLink = ''; q('vx-pu').value = ''; pFoto(pImg.dataUrl); pErr(''); }
-  catch (x) { pErr('Não consegui ler esta imagem. Escolha uma foto em JPG ou PNG.'); }
+  catch (x) { pErr(x.message || 'Não consegui ler esta imagem. Escolha uma foto em JPG ou PNG.'); }
 }
 async function takeUrl(u) {
   u = (u || '').trim();

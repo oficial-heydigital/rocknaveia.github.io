@@ -89,14 +89,29 @@ async function album(){const n=$('al').value;$('nw').hidden=!!n;$('da').hidden=!
  const l=(await get('fotos/'+n))||[];$('ph').innerHTML='<div class="g">'+l.filter(x=>/\.(jpe?g|png|webp)$/i.test(x.name)).map(x=>`<div><img src="${x.download_url}" alt="${x.name}"><button class="d" data-p="${x.path}" data-s="${x.sha}" aria-label="Excluir foto">✕</button></div>`).join('')+'</div>'}
 $('ph').onclick=e=>{const b=e.target.closest('button[data-p]');if(!b||!confirm('Excluir esta foto?'))return;run(async()=>{await del(b.dataset.p,b.dataset.s,'Excluir foto');msg('Foto excluída!');album()})};
 $('da').onclick=()=>{if(!confirm('Excluir o álbum INTEIRO e todas as fotos dele?'))return;run(async()=>{const n=$('al').value;for(const x of await get('fotos/'+n))await del(x.path,x.sha,'Excluir álbum '+n);msg('Álbum excluído!');albums()})};
-async function shrink(f){const bm=await createImageBitmap(f,{imageOrientation:'from-image'});const k=Math.min(1,2000/Math.max(bm.width,bm.height));
- const c=document.createElement('canvas');c.width=bm.width*k;c.height=bm.height*k;c.getContext('2d').drawImage(bm,0,0,c.width,c.height);
- return new Promise(r=>c.toBlob(b=>{const fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.readAsDataURL(b)},'image/jpeg',.85))}
+/* Lê a foto com plano B: createImageBitmap (com e sem orientação) e depois <img>. Dá mensagem clara se o formato não abrir. */
+async function loadBitmap(f){const nm=(f&&f.name)||'imagem';
+ if(!f||!f.size)throw new Error('O arquivo "'+nm+'" está vazio. Se a foto está na nuvem (iCloud, Google Fotos), baixe para o aparelho antes de enviar.');
+ for(const o of [{imageOrientation:'from-image'},undefined]){try{return await createImageBitmap(f,o)}catch(e){}}
+ const u=URL.createObjectURL(f);
+ try{const im=new Image();im.src=u;await im.decode();return{src:im,width:im.naturalWidth,height:im.naturalHeight}}
+ catch(e){const heic=/hei[cf]/i.test(f.type||'')||/\.hei[cf]$/i.test(nm);
+  throw new Error('Não consegui abrir "'+nm+'". '+(heic?'Este navegador não lê fotos HEIC. No iPhone, vá em Ajustes > Câmera > Formatos > Mais Compatível (ou abra o admin pelo Safari). No computador, converta a foto para JPG.':'Tente outra foto, em JPG, PNG ou WebP.'))}
+ finally{setTimeout(()=>URL.revokeObjectURL(u),30000)}}
+async function shrink(f,max=2000){const nm=(f&&f.name)||'imagem',bm=await loadBitmap(f),w=bm.width,h=bm.height;
+ if(!w||!h)throw new Error('Não consegui abrir "'+nm+'".');
+ const k=Math.min(1,max/Math.max(w,h)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(w*k));c.height=Math.max(1,Math.round(h*k));
+ const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(bm.src||bm,0,0,c.width,c.height);if(bm.close)bm.close();
+ return new Promise((r,j)=>c.toBlob(b=>{if(!b)return j(new Error('Não consegui processar "'+nm+'". A foto pode ser grande demais para este aparelho.'));
+  const fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.onerror=()=>j(new Error('Falha ao ler "'+nm+'".'));fr.readAsDataURL(b)},'image/jpeg',.85))}
 $('up').onclick=()=>run(async()=>{let n=$('al').value;const fs=[...$('fi').files];if(!fs.length)throw new Error('Escolha as fotos primeiro.');
  if(!n){const nm=$('nn').value.trim();if(!nm)throw new Error('Digite o nome do novo álbum.');n=($('nd').value||today())+'-'+slug(nm)}
  $('up').disabled=true;$('pg').hidden=false;$('pg').max=fs.length;$('pg').value=0;const t=Date.now();
- try{for(let i=0;i<fs.length;i++){await put('fotos/'+n+'/'+t+'-'+String(i).padStart(3,'0')+'.jpg',await shrink(fs[i]),'Adicionar foto');$('pg').value=i+1}
- msg('Fotos enviadas com sucesso!');$('fi').value='';$('nn').value='';await albums(n)}finally{$('up').disabled=false;$('pg').hidden=true}});
+ try{let ok=0;const bad=[];for(let i=0;i<fs.length;i++){let b64;try{b64=await shrink(fs[i])}catch(e){bad.push(e.message);$('pg').value=i+1;continue}
+ await put('fotos/'+n+'/'+t+'-'+String(i).padStart(3,'0')+'.jpg',b64,'Adicionar foto');ok++;$('pg').value=i+1}
+ if(!ok)throw new Error(bad[0]);
+ if(bad.length)msg(ok+(ok>1?' fotos enviadas':' foto enviada')+'. '+bad.length+' não abriu: '+bad[0],false);else msg('Fotos enviadas com sucesso!');
+ $('fi').value='';$('nn').value='';await albums(n)}finally{$('up').disabled=false;$('pg').hidden=true}});
 
 /* VÍDEOS */
 let VF=null;async function vids(){VF=await get('videos.txt');const L=VF?dec(VF.content).split('\n'):[];
