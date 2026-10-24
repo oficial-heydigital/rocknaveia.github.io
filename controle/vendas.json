@@ -34,7 +34,7 @@
    "qtd": 20,
    "custo": 323.25,
    "preco": 800,
-   "recebido": false,
+   "recebido": true,
    "foto": "controle/fotos/mvg5ggyb.jpg"
   }
  ],
