@@ -82,6 +82,17 @@
    "pgto": "cartao",
    "id": "mmvjzv3j98eo",
    "c": 1792700957349
+  },
+  {
+   "tipo": "venda",
+   "produto": "p2",
+   "qtd": 2,
+   "data": "2026-10-24",
+   "obs": "2 chaveiros - Rogério",
+   "preco": 800,
+   "pgto": "pix",
+   "id": "mmvmnq3mjre1",
+   "c": 1792861967323
   }
  ]
 }
