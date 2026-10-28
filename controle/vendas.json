@@ -82,6 +82,17 @@
    "pgto": "cartao",
    "id": "mmvjzv3j98eo",
    "c": 1792700957349
+  },
+  {
+   "tipo": "venda",
+   "produto": "p1",
+   "qtd": 3,
+   "data": "2026-10-27",
+   "obs": "3 - Renk PIX",
+   "preco": 600,
+   "pgto": "pix",
+   "id": "mmvrgajb0sjj",
+   "c": 1793151814717
   }
  ]
 }
