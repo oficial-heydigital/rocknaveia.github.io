@@ -25,7 +25,7 @@
    "qtd": 50,
    "custo": 460,
    "preco": 1500,
-   "recebido": false,
+   "recebido": true,
    "foto": "controle/fotos/mvg5clzx.jpg"
   },
   {
