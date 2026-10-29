@@ -104,6 +104,17 @@
    "pgto": "pix",
    "id": "mmvu1hqhdpq4",
    "c": 1793308354897
+  },
+  {
+   "tipo": "venda",
+   "produto": "p3",
+   "qtd": 1,
+   "data": "2026-10-29",
+   "obs": "1 copo - aninha",
+   "preco": 1500,
+   "pgto": "pix",
+   "id": "mmvu1i3zxlld",
+   "c": 1793308372413
   }
  ]
 }
