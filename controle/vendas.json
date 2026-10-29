@@ -93,6 +93,17 @@
    "pgto": "pix",
    "id": "mmvrgajb0sjj",
    "c": 1793151814717
+  },
+  {
+   "tipo": "venda",
+   "produto": "p3",
+   "qtd": 2,
+   "data": "2026-10-29",
+   "obs": "2 copos - Renk",
+   "preco": 1500,
+   "pgto": "pix",
+   "id": "mmvu1hqhdpq4",
+   "c": 1793308354897
   }
  ]
 }
