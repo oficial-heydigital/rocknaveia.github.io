@@ -159,6 +159,17 @@
    "pgto": "pix",
    "id": "mmvwzsb4zuk6",
    "c": 1793486887523
+  },
+  {
+   "tipo": "venda",
+   "produto": "p3",
+   "qtd": 1,
+   "data": "2026-10-31",
+   "obs": "",
+   "preco": 1500,
+   "pgto": "pix",
+   "id": "mmvx0am1lhcw",
+   "c": 1793487741465
   }
  ]
 }
