@@ -137,6 +137,17 @@
    "pgto": "cartao",
    "id": "mmvwt5qm3wko",
    "c": 1793475756795
+  },
+  {
+   "tipo": "venda",
+   "produto": "p3",
+   "qtd": 2,
+   "data": "2026-10-31",
+   "obs": "",
+   "preco": 1500,
+   "pgto": "pix",
+   "id": "mmvwy2wqh3ib",
+   "c": 1793484022842
   }
  ]
 }
