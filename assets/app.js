@@ -46,7 +46,7 @@ fetch('data/site.json').then(function(r){return r.json()}).then(function(D){
   var sc=document.createElement('script');sc.async=true;sc.src='https://www.instagram.com/embed.js';document.body.appendChild(sc)}
  var P=D.posts||[];
  $('posts').innerHTML=P.length?P.map(function(p,i){
-  var im=(p.images||[]).map(function(s,k){return'<img class="th" loading="lazy" alt="Foto do post '+esc(p.title)+'" data-p="'+i+'" data-k="'+k+'" src="'+esc(s)+'">'}).join('');
+  var im=(p.images||[]).map(function(s,k){return'<img class="th" loading="eager" alt="Foto do post '+esc(p.title)+'" data-p="'+i+'" data-k="'+k+'" src="'+esc(s)+'">'}).join('');
   var vd=(p.videos||[]).map(function(v,k){return v.youtube?'<a href="'+esc(v.url)+'" data-p="'+i+'" data-v="'+k+'"><img class="th vt" loading="lazy" alt="Vídeo do post" src="https://img.youtube.com/vi/'+v.youtube+'/hqdefault.jpg"></a>':'<video controls preload="metadata" src="'+esc(v.url)+'" style="width:100%;border-radius:12px"></video>'}).join('');
   return'<div class="card"><p class="dt">'+fd(p.date)+'</p><h3>'+esc(p.title)+'</h3>'+(p.body?'<p class="pm" style="color:var(--tx)">'+esc(p.body)+'</p>':'')+(im?'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr));margin-top:12px">'+im+'</div>':'')+(vd?'<div class="grid" style="margin-top:12px">'+vd+'</div>':'')+'</div>'}).join(''):'<p>Nenhuma novidade por enquanto.</p>';
  $('posts').onclick=function(e){var t=e.target,a=t.closest('a[data-v]');

@@ -430,7 +430,11 @@
       #events .card:not(.big)>.date{flex:0 0 58px;min-width:0}
       #events .card:not(.big)>div:last-child{min-width:0}
       #albums{grid-template-columns:repeat(3,minmax(0,1fr));justify-content:start}
-      #posts{grid-template-columns:minmax(0,1fr);max-height:min(78vh,900px);overflow-y:auto;align-content:start;padding-right:8px}
+      #posts{grid-template-columns:minmax(0,1fr);max-height:min(78vh,900px);overflow-y:auto;align-content:start;padding-right:8px;scrollbar-width:thin;scrollbar-color:var(--p) #101014}
+      #posts::-webkit-scrollbar{width:10px}
+      #posts::-webkit-scrollbar-track{background:#101014;border-radius:8px}
+      #posts::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--p),var(--y));border:2px solid #101014;border-radius:8px}
+      #posts::-webkit-scrollbar-thumb:hover{background:var(--y)}
       #posts:focus-visible{outline:3px solid var(--p);outline-offset:3px}
       @media(max-width:760px){
         #albums{grid-template-columns:repeat(2,minmax(0,1fr))}
