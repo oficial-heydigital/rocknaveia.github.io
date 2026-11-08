@@ -426,7 +426,18 @@
       .mem .card img{order:-1;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center top;border-radius:10px;margin-bottom:14px;display:block;background:var(--bg)}
       .mem .card h3{font-size:1.6rem}
       #banda p img{display:block;width:100%;height:auto}
-      #albums{grid-template-columns:repeat(auto-fill,minmax(260px,380px));justify-content:start}
+      #events .card:not(.big){display:flex;align-items:center;gap:16px}
+      #events .card:not(.big)>.date{flex:0 0 58px;min-width:0}
+      #events .card:not(.big)>div:last-child{min-width:0}
+      #albums{grid-template-columns:repeat(3,minmax(0,1fr));justify-content:start}
+      #posts{grid-template-columns:minmax(0,1fr);max-height:min(78vh,900px);overflow-y:auto;align-content:start;padding-right:8px}
+      #posts:focus-visible{outline:3px solid var(--p);outline-offset:3px}
+      @media(max-width:760px){
+        #albums{grid-template-columns:repeat(2,minmax(0,1fr))}
+      }
+      @media(max-width:520px){
+        #albums{grid-template-columns:1fr}
+      }
     </style>
   </head>
   <body>
@@ -494,7 +505,7 @@
       <section id="novidades" class="alt">
         <div class="w">
           <h2>Novidades</h2>
-          <div class="grid ev" id="posts"></div>
+          <div class="grid ev" id="posts" role="region" aria-label="Lista de novidades" tabindex="0"></div>
         </div>
       </section>
 
@@ -550,6 +561,11 @@
             <div class="card">
               <h3>Rogério</h3>
               <img src="assets/rogerio.jpeg" alt="Rogério, guitarrista da banda Rock na Véia" />
+              <p>Guitarra</p>
+            </div>
+            <div class="card">
+              <h3>Jeff</h3>
+              <img src="assets/jeff.jpeg" alt="Jeff, guitarrista da banda Rock na Véia" />
               <p>Guitarra</p>
             </div>
             <div class="card">
