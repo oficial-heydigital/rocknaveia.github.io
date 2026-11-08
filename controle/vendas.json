@@ -192,6 +192,17 @@
    "pgto": "pix",
    "id": "mmw82xrcde7x",
    "c": 1794157308589
+  },
+  {
+   "tipo": "venda",
+   "produto": "p1",
+   "qtd": 3,
+   "data": "2026-11-08",
+   "obs": "Rogerinho",
+   "preco": 600,
+   "pgto": "pix",
+   "id": "mmw82y1btnr3",
+   "c": 1794157321529
   }
  ]
 }
