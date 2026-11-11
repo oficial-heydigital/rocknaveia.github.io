@@ -234,7 +234,18 @@
    "obs": "JEFF PRESENTE",
    "motivo": "brinde",
    "id": "mmwcd5pqi3kf",
-   "c": 1794416340618
+   "c": 1794416340618,
+   "preco": 0
+  },
+  {
+   "tipo": "baixa",
+   "produto": "p3",
+   "qtd": 1,
+   "data": "2026-11-11",
+   "obs": "JEFF PRESENTE",
+   "motivo": "brinde",
+   "id": "mmwcd5y6f6nt",
+   "c": 1794416351559
   }
  ]
 }
